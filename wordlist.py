@@ -7,7 +7,6 @@ class WordList:
 
     def __init__(self, dict_path="dictionary.txt"):
         """Create a word list from a dictionary file on disk.
-
             >>> wl = WordList("test_dictionary.txt")
             >>> wl.words == {'CAT', 'DOG'}
             True
@@ -28,7 +27,15 @@ class WordList:
         return words
 
     def check_word(self, word):
-        """Is word in word list?"""
+        """Is word in word list?
+            >>> wl = WordList("test_dictionary.txt")
+            >>> wl.words == {'CAT', 'DOG'}
+            True
+            >>> wl.check_word('ELEPHANT')
+            False
+            >>> wl.check_word('CAT')
+            True
+        """
 
         return word in self.words
 
