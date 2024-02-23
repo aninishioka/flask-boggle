@@ -33,3 +33,16 @@ def new_game():
     games[game_id] = game
 
     return jsonify({'gameId': game_id, 'board': game.board})
+
+@app.post('/api/score-word')
+def check_valid_word():
+    # TODO: make case insensitive. convert word to uppercase
+    gameId = request.json['gameId']
+    word = request.json['word']
+    game = games[gameId]
+    if (not game.is_word_in_word_list(word)):
+        return jsonify({"result": "not-word"})
+    elif (not game.check_word_on_board(word)):
+        return jsonify({"result": "not-on-board"})
+    else:
+        return jsonify({"result": "ok"})
