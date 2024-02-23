@@ -32,4 +32,4 @@ def new_game():
     game = BoggleGame()
     games[game_id] = game
 
-    return None   # FIXME
+    return jsonify({'gameId': game_id, 'board': game.board})
