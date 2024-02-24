@@ -5,6 +5,8 @@ const $form = $("#newWordForm");
 const $wordInput = $("#wordInput");
 const $message = $(".msg");
 const $table = $("table");
+const $gameScore = $('.game-score');
+const $wordScore = $('.word-score');
 
 let gameId;
 $('.word-input-btn').on('click', handleWordSubmission);
@@ -48,6 +50,8 @@ async function handleWordSubmission(evt) {
   const word = $wordInput.val();
   const result = await sendWordToAPI(word);
   displayWordResult(result, word);
+  displayScores(result);
+
 }
 
 /** Takes string.Sends fetch request to API to check word validity and
@@ -60,9 +64,7 @@ async function sendWordToAPI(word) {
       "content-type": "application/json",
     }
   });
-
-  const { result } = await response.json();
-  return result;
+  return await response.json();
 }
 
 /** Takes API validity check result and word and either appends to played words
@@ -71,13 +73,19 @@ async function sendWordToAPI(word) {
 function displayWordResult(result, word) {
   console.log("display word results");
   console.log(result);
-  if (result == "ok") {
+  if (result.result == "ok") {
     $playedWords.append($('<li>').text(word));
-  } else if (result == "not-on-board") {
+  } else if (result.result == "not-on-board") {
     $message.html("Word is not on board!");
-  } else if (result == "not-word") {
+  } else if (result.result == "not-word") {
     $message.html("Word is not a word!");
   }
+}
+
+function displayScores(result) {
+  $wordScore.html(result.word_score);
+  $gameScore.html(result.game_score);
+
 }
 
 start();

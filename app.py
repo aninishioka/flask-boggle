@@ -45,4 +45,4 @@ def check_valid_word():
     elif (not game.check_word_on_board(word)):
         return jsonify({"result": "not-on-board"})
     else:
-        return jsonify({"result": "ok"})
+        return jsonify({"result": "ok", "word_score":game.play_and_score_word(word), "game_score": game.score})
