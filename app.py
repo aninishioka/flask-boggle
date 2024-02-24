@@ -44,5 +44,7 @@ def check_valid_word():
         return jsonify({"result": "not-word"})
     elif (not game.check_word_on_board(word)):
         return jsonify({"result": "not-on-board"})
+    elif (not game.is_word_not_a_dup(word)):
+        return jsonify({"result": "duplicate-word"})
     else:
         return jsonify({"result": "ok", "word_score":game.play_and_score_word(word), "game_score": game.score})

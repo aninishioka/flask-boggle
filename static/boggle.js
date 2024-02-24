@@ -7,8 +7,12 @@ const $message = $(".msg");
 const $table = $("table");
 const $gameScore = $('.game-score');
 const $wordScore = $('.word-score');
+const $time = $('#time');
+const START_TIME = 60;
 
 let gameId;
+let time = 60;
+let timerInterval;
 $('.word-input-btn').on('click', handleWordSubmission);
 
 
@@ -24,6 +28,7 @@ async function start() {
   let board = gameData.board;
 
   displayBoard(board);
+  intervalId = setInterval(displayTime, 1000);
 }
 
 /** Creates game board and displays in DOM. */
@@ -79,6 +84,8 @@ function displayWordResult(result, word) {
     $message.html("Word is not on board!");
   } else if (result.result == "not-word") {
     $message.html("Word is not a word!");
+  } else if (result.result == "duplicate-word") {
+    $message.html("Word is duplicate!");
   }
 }
 
@@ -86,6 +93,14 @@ function displayScores(result) {
   $wordScore.html(result.word_score);
   $gameScore.html(result.game_score);
 
+}
+
+function displayTime() {
+  $time.html(`${--time} seconds`);
+  if (time == 0) {
+    clearInterval(timerInterval);
+    $table.empty();
+  }
 }
 
 start();
