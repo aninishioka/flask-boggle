@@ -36,7 +36,7 @@ class BoggleAppTestCase(TestCase):
             self.assertIsInstance(json['gameId'], str)
             self.assertIsInstance(json['board'], list)
             self.assertIn(json['gameId'], games)
-            # TODO: test shape json
+            self.assertEqual({"gameId": json['gameId'], "board": json['board']}, json)
             # make a post request to /api/new-game
             # get the response body as json using .get_json()
             # test that the game_id is a string

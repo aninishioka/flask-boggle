@@ -7,10 +7,10 @@ const $message = $(".msg");
 const $table = $("table");
 
 let gameId;
-$('.word-input-btn').on('click', newWordApi);
+$('.word-input-btn').on('click', handleWordSubmission);
 
 
-/** Start */
+/** Sends fetch request to API to start game and displays board. */
 
 async function start() {
   const response = await fetch(`/api/new-game`, {
@@ -24,7 +24,7 @@ async function start() {
   displayBoard(board);
 }
 
-/** Display board */
+/** Creates game board and displays in DOM. */
 
 function displayBoard(board) {
   $table.empty();
@@ -42,20 +42,42 @@ function displayBoard(board) {
   $table.append($tbody);
 }
 
-
-async function newWordApi(evt) {
+/** Gets word from form, checks word validity, and displays result to DOM. */
+async function handleWordSubmission(evt) {
   evt.preventDefault();
+  const word = $wordInput.val();
+  const result = await sendWordToAPI(word);
+  displayWordResult(result, word);
+}
+
+/** Takes string.Sends fetch request to API to check word validity and
+ * returns result. */
+async function sendWordToAPI(word) {
   const response = await fetch('/api/score-word', {
     method: "POST",
-    body: JSON.stringify({ gameId: gameId, word: $wordInput.val() }),
+    body: JSON.stringify({ gameId: gameId, word: word }),
     headers: {
       "content-type": "application/json",
     }
   });
 
-  const result = await response.json();
-  console.log(result);
+  const { result } = await response.json();
+  return result;
+}
 
+/** Takes API validity check result and word and either appends to played words
+ * list or shows error message.
+ */
+function displayWordResult(result, word) {
+  console.log("display word results");
+  console.log(result);
+  if (result == "ok") {
+    $playedWords.append($('<li>').text(word));
+  } else if (result == "not-on-board") {
+    $message.html("Word is not on board!");
+  } else if (result == "not-word") {
+    $message.html("Word is not a word!");
+  }
 }
 
 start();
